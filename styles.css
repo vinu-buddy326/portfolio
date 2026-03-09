@@ -424,10 +424,73 @@ ul {
   box-shadow: 0 24px 44px rgba(0, 0, 0, 0.18);
 }
 
-.profile-avatar img {
+.initials-avatar {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #3a1f1f;
+  background: radial-gradient(circle at 20% 20%, #fff7f3, #e8a7a7);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.7);
+  position: relative;
+  overflow: hidden;
+}
+
+.initials-avatar span {
+  font-size: 2.3rem;
+  text-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.initials-avatar::before,
+.initials-avatar::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  filter: blur(10px);
+}
+
+.initials-avatar::before {
+  width: 140%;
+  height: 60%;
+  top: -10%;
+  left: -20%;
+  opacity: 0.6;
+}
+
+.initials-avatar::after {
+  width: 120%;
+  height: 40%;
+  bottom: -10%;
+  right: -10%;
+  opacity: 0.35;
+}
+
+.initials-avatar--hero {
+  animation: avatarFloat 5s ease-in-out infinite;
+}
+
+.initials-avatar--about {
+  animation: avatarFloat 6s ease-in-out infinite;
+}
+
+@keyframes avatarFloat {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 24px 44px rgba(0, 0, 0, 0.18);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 32px 60px rgba(0, 0, 0, 0.22);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 24px 44px rgba(0, 0, 0, 0.18);
+  }
 }
 
 .profile-tag {
