@@ -798,10 +798,12 @@ ul {
 }
 
 .cert-card__image {
-  height: 180px;
-  background-size: cover;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  background-color: #ffffff;
 }
 
 .cert-card__image--1 {
@@ -814,14 +816,6 @@ ul {
 
 .cert-card__image--3 {
   background-image: url("hp-foundation.jpeg");
-}
-
-.cert-card__image--4 {
-  background-image: linear-gradient(135deg, #f5e9e2, #f7c8a8);
-}
-
-.cert-card__image--5 {
-  background-image: linear-gradient(135deg, #f5e9e2, #e89aa7);
 }
 
 .cert-card__overlay {

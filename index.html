@@ -363,37 +363,6 @@
             </div>
           </article>
 
-          <article class="cert-card hover-cursor">
-            <div class="cert-card__image cert-card__image--4"></div>
-            <div class="cert-card__overlay">
-              <div class="cert-card__content">
-                <h3 class="cert-card__title">
-                  TECH EXPO 
-                </h3>
-                <p class="cert-card__org">DSU</p>
-                <div class="cert-card__actions">
-                  <a href="tech-expo.jpeg" target="_blank" rel="noopener noreferrer" class="btn btn--overlay hover-cursor">View Certificate</a>
-                  <a href="tech-expo.jpeg" download="Tech-Expo-DSU-Certificate.jpeg" class="btn btn--overlay hover-cursor">Download Certificate</a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="cert-card hover-cursor">
-            <div class="cert-card__image cert-card__image--5"></div>
-            <div class="cert-card__overlay">
-              <div class="cert-card__content">
-                <h3 class="cert-card__title">
-                  Python Essentials for Students and Young Researchers (NTTF)
-                </h3>
-                <p class="cert-card__org">NTTF</p>
-                <div class="cert-card__actions">
-                  <a href="python-nttf.jpeg" target="_blank" rel="noopener noreferrer" class="btn btn--overlay hover-cursor">View Certificate</a>
-                  <a href="python-nttf.jpeg" download="Python-Essentials-NTTF-Certificate.jpeg" class="btn btn--overlay hover-cursor">Download Certificate</a>
-                </div>
-              </div>
-            </div>
-          </article>
         </div>
       </section>
 
@@ -496,7 +465,15 @@
 
           <div class="contact__form-wrap">
             <div class="contact-star"></div>
-            <form class="contact-form">
+            <form
+              class="contact-form"
+              action="https://formsubmit.co/vinuthnavasanthi@gmail.com"
+              method="POST"
+            >
+              <input type="hidden" name="_subject" value="New message from portfolio contact form" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_next" value="index.html?sent=1#contact" />
               <div class="form-row">
                 <label for="name">Name</label>
                 <input
@@ -505,6 +482,7 @@
                   name="name"
                   placeholder="Your name"
                   class="hover-cursor"
+                  required
                 />
               </div>
               <div class="form-row">
@@ -515,6 +493,7 @@
                   name="email"
                   placeholder="your@email.com"
                   class="hover-cursor"
+                  required
                 />
               </div>
               <div class="form-row">
@@ -525,6 +504,7 @@
                   rows="4"
                   placeholder="Share your idea or query..."
                   class="hover-cursor"
+                  required
                 ></textarea>
               </div>
               <button type="submit" class="btn btn--primary hover-cursor">

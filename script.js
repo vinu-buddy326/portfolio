@@ -371,11 +371,10 @@ tiltCards.forEach((card) => {
   });
 });
 
-// Prevent form actual submission (for demo)
+// Small submit feedback (submission is handled by the form action)
 const contactForm = document.querySelector(".contact-form");
 if (contactForm) {
-  contactForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+  contactForm.addEventListener("submit", () => {
     gsap.to(contactForm, {
       y: -4,
       duration: 0.08,
