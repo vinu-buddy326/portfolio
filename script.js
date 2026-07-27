@@ -89,6 +89,17 @@ window.addEventListener("load", () => {
       },
       "-=0.5"
     );
+
+  // Check if form was submitted (sent=1 in URL)
+  if (window.location.search.includes("sent=1")) {
+    const toast = document.getElementById("toast-notification");
+    if (toast) {
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 5000);
+    }
+  }
 });
 
 // Rotating & floating stars
@@ -130,7 +141,7 @@ function createSparkles() {
   for (let i = 0; i < 6; i++) {
     const spark = document.createElement("div");
     spark.classList.add("sparkle");
-    const top = Math.random() * 40 + 10; // percentage
+    const top = Math.random() * 40 + 10;
     const left = Math.random() * 60 + 10;
 
     spark.style.top = `${top}%`;
@@ -157,7 +168,7 @@ function setupRevealAnimation(selector, options = {}) {
     gsap.from(el, {
       scrollTrigger: {
         trigger: el,
-        start: "top 80%",
+        start: "top 85%",
       },
       y: options.y ?? 20,
       x: options.x ?? 0,
@@ -173,7 +184,7 @@ function setupRevealAnimation(selector, options = {}) {
 gsap.from(".about-photo", {
   scrollTrigger: {
     trigger: ".about-photo",
-    start: "top 80%",
+    start: "top 85%",
   },
   y: 40,
   opacity: 0,
@@ -184,7 +195,7 @@ gsap.from(".about-photo", {
 gsap.from(".about__content", {
   scrollTrigger: {
     trigger: ".about__content",
-    start: "top 80%",
+    start: "top 85%",
   },
   y: 40,
   opacity: 0,
@@ -195,7 +206,7 @@ gsap.from(".about__content", {
 gsap.from(".highlight-card", {
   scrollTrigger: {
     trigger: ".about__highlights",
-    start: "top 85%",
+    start: "top 90%",
   },
   y: 24,
   opacity: 0,
@@ -209,7 +220,7 @@ const skillSection = document.querySelector(".skills");
 if (skillSection) {
   ScrollTrigger.create({
     trigger: skillSection,
-    start: "top 80%",
+    start: "top 85%",
     once: true,
     onEnter: () => {
       const bars = document.querySelectorAll(".skill-bar__fill");
@@ -228,37 +239,39 @@ if (skillSection) {
 // Skills section text reveal
 setupRevealAnimation(".skills__group", { y: 30, duration: 0.8 });
 
-// Projects reveal
+// Projects reveal with clearProps
 gsap.from(".project-card", {
   scrollTrigger: {
     trigger: ".projects__grid",
-    start: "top 80%",
-  },
-  y: 30,
-  opacity: 0,
-  duration: 0.7,
-  stagger: 0.18,
-  ease: easeDefault,
-});
-
-// Certifications reveal
-gsap.from(".cert-card", {
-  scrollTrigger: {
-    trigger: ".certifications__grid",
-    start: "top 80%",
+    start: "top 90%",
   },
   y: 30,
   opacity: 0,
   duration: 0.7,
   stagger: 0.15,
   ease: easeDefault,
+  clearProps: "transform,opacity",
+});
+
+// Certifications reveal
+gsap.from(".cert-card", {
+  scrollTrigger: {
+    trigger: ".certifications__grid",
+    start: "top 90%",
+  },
+  y: 30,
+  opacity: 0,
+  duration: 0.7,
+  stagger: 0.15,
+  ease: easeDefault,
+  clearProps: "transform,opacity",
 });
 
 // Resume cards slide in from sides
 gsap.from(".resume-card--left", {
   scrollTrigger: {
     trigger: ".resume-card--left",
-    start: "top 80%",
+    start: "top 85%",
   },
   x: -60,
   opacity: 0,
@@ -269,7 +282,7 @@ gsap.from(".resume-card--left", {
 gsap.from(".resume-card--right", {
   scrollTrigger: {
     trigger: ".resume-card--right",
-    start: "top 80%",
+    start: "top 85%",
   },
   x: 60,
   opacity: 0,
@@ -280,7 +293,7 @@ gsap.from(".resume-card--right", {
 gsap.from(".resume-item", {
   scrollTrigger: {
     trigger: ".resume__grid",
-    start: "top 80%",
+    start: "top 85%",
   },
   y: 16,
   opacity: 0,
@@ -293,7 +306,7 @@ gsap.from(".resume-item", {
 gsap.from(".contact__details", {
   scrollTrigger: {
     trigger: ".contact__grid",
-    start: "top 82%",
+    start: "top 85%",
   },
   y: 40,
   opacity: 0,
@@ -370,17 +383,3 @@ tiltCards.forEach((card) => {
     });
   });
 });
-
-// Small submit feedback (submission is handled by the form action)
-const contactForm = document.querySelector(".contact-form");
-if (contactForm) {
-  contactForm.addEventListener("submit", () => {
-    gsap.to(contactForm, {
-      y: -4,
-      duration: 0.08,
-      yoyo: true,
-      repeat: 1,
-    });
-  });
-}
-
