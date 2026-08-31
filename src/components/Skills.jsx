@@ -5,15 +5,15 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const allSkills = [
-  { name: 'Python', level: 90, category: 'Languages', icon: '🐍', desc: 'Data Structures, ML Models, Scripting' },
-  { name: 'Machine Learning', level: 85, category: 'AI & ML', icon: '🤖', desc: 'Scikit-Learn, Predictive Algorithms' },
-  { name: 'Artificial Intelligence', level: 85, category: 'AI & ML', icon: '⚡', desc: 'Neural Concepts, Algorithmic Logic' },
-  { name: 'Data Science & SQL', level: 85, category: 'Data & SQL', icon: '📊', desc: 'Data Wrangling, Queries, Analytics' },
-  { name: 'OpenCV Biometrics', level: 85, category: 'Vision', icon: '👁️', desc: 'Facial Recognition, Image Processing' },
-  { name: 'Core Java', level: 80, category: 'Languages', icon: '☕', desc: 'OOP Principles, System Development' },
-  { name: 'Core C', level: 75, category: 'Languages', icon: '💻', desc: 'Pointers, Low-Level Logic' },
-  { name: 'HTML5 & CSS3', level: 85, category: 'Web Tech', icon: '🌐', desc: 'Semantic Layouts, Responsive UI' },
-  { name: 'JavaScript (ES6+)', level: 80, category: 'Web Tech', icon: '✨', desc: 'DOM, Dynamic Web Logic' },
+  { episode: 'EPISODE #01', name: 'Python', level: 90, category: 'Languages', icon: '🐍', tag: 'CORE LANGUAGE', desc: 'Data Structures, ML Models, Scripting, Automation' },
+  { episode: 'EPISODE #02', name: 'Machine Learning', level: 85, category: 'AI & ML', icon: '🤖', tag: 'ALGORITHMS', desc: 'Scikit-Learn, Predictive Modeling, SMOTE, Tuning' },
+  { episode: 'EPISODE #03', name: 'Artificial Intelligence', level: 85, category: 'AI & ML', icon: '⚡', tag: 'INTELLIGENCE', desc: 'Neural Concepts, Algorithmic Logic, Heuristics' },
+  { episode: 'EPISODE #04', name: 'Computer Vision', level: 85, category: 'Vision', icon: '👁️', tag: 'BIOMETRICS', desc: 'OpenCV, Real-Time Facial Recognition, Processing' },
+  { episode: 'EPISODE #05', name: 'Data Science & SQL', level: 85, category: 'Data & SQL', icon: '📊', tag: 'ANALYTICS', desc: 'Feature Engineering, Relational Queries, Wrangling' },
+  { episode: 'EPISODE #06', name: 'Core Java', level: 80, category: 'Languages', icon: '☕', tag: 'OOP ARCHITECTURE', desc: 'OOP Principles, Exception Handling, System Logic' },
+  { episode: 'EPISODE #07', name: 'Core C', level: 75, category: 'Languages', icon: '💻', tag: 'LOW LEVEL', desc: 'Pointers, Memory Allocation, Data Logic' },
+  { episode: 'EPISODE #08', name: 'HTML5 & CSS3', level: 85, category: 'Web Tech', icon: '🌐', tag: 'FRONTEND', desc: 'Semantic Layouts, Glassmorphism, Responsive UI' },
+  { episode: 'EPISODE #09', name: 'JavaScript (ES6+)', level: 80, category: 'Web Tech', icon: '✨', tag: 'DYNAMIC SCRIPT', desc: 'DOM Manipulation, Async Logic, Modern Frameworks' }
 ];
 
 const toolTags = [
@@ -21,88 +21,78 @@ const toolTags = [
   'Jupyter Notebook', 'Google Colab', 'Arduino IoT', 'SMOTE Analytics'
 ];
 
-const softSkills = [
-  'Problem Solving', 'Team Leadership', 'Communication', 'Adaptability', 'Hackathon Collaboration'
-];
-
 const Skills = () => {
   const sectionRef = useRef(null);
-  const arcContainerRef = useRef(null);
-  const skillNodesRef = useRef([]);
-  const centerHubRef = useRef(null);
-  const [activeSkill, setActiveSkill] = useState(allSkills[0]);
+  const cardsRef = useRef([]);
   const [activeFilter, setActiveFilter] = useState('ALL');
 
-  const filteredSkills = activeFilter === 'ALL' 
-    ? allSkills 
-    : allSkills.filter(s => s.category.toUpperCase().includes(activeFilter.toUpperCase()) || activeFilter === 'ALL');
+  const categories = ['ALL', 'AI & ML', 'LANGUAGES', 'VISION', 'DATA & SQL', 'WEB TECH'];
+
+  const filteredSkills = activeFilter === 'ALL'
+    ? allSkills
+    : allSkills.filter(s => s.category.toUpperCase().includes(activeFilter.toUpperCase()));
 
   useEffect(() => {
     const section = sectionRef.current;
-    const arcContainer = arcContainerRef.current;
-    const nodes = skillNodesRef.current.filter(Boolean);
+    if (!section) return;
 
-    if (!section || !arcContainer || !nodes.length) return;
+    const cards = cardsRef.current.filter(Boolean);
 
-    // --- GSAP CURVED ARC SCROLL ANIMATION ---
     const ctx = gsap.context(() => {
-      // Entrance timeline: skills fan out in half-circle arc formation
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 75%',
-          end: 'bottom bottom',
-          toggleActions: 'play none none reverse'
-        }
-      });
-
-      // Animate Center Hub
-      if (centerHubRef.current) {
-        tl.fromTo(centerHubRef.current, 
-          { scale: 0, opacity: 0, rotation: -45 },
-          { scale: 1, opacity: 1, rotation: 0, duration: 1, ease: 'back.out(1.4)' }
+      if (cards.length > 0) {
+        gsap.fromTo(
+          cards,
+          { y: 60, opacity: 0, scale: 0.92, rotationX: 15 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            rotationX: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 75%',
+              toggleActions: 'play none none reverse'
+            }
+          }
         );
       }
 
-      // Animate Arc Skills Nodes sequentially into curved arc formation
-      tl.fromTo(nodes,
-        { 
-          scale: 0, 
-          opacity: 0, 
-          y: 80,
-          rotation: -25 
-        },
-        { 
-          scale: 1, 
-          opacity: 1, 
-          y: 0,
-          rotation: 0,
-          duration: 0.9, 
-          stagger: 0.08, 
-          ease: 'power3.out' 
-        },
-        '-=0.6'
-      );
+      // 3D Card Hover Physics per card
+      cards.forEach((card) => {
+        const handleMouseMove = (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
 
-      // Scroll scrubbing rotation effect along the curved arc formation
-      gsap.to(arcContainer, {
-        rotation: 12,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.2
-        }
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = -((y - centerY) / centerY) * 10;
+          const rotateY = ((x - centerX) / centerX) * 10;
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        };
+
+        const handleMouseLeave = () => {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        };
+
+        card.addEventListener('mousemove', handleMouseMove);
+        card.addEventListener('mouseleave', handleMouseLeave);
       });
     }, section);
 
     return () => ctx.revert();
   }, [filteredSkills]);
 
-  const addToNodes = (el) => {
-    if (el && !skillNodesRef.current.includes(el)) {
-      skillNodesRef.current.push(el);
+  const addToRefs = (el) => {
+    if (el && !cardsRef.current.includes(el)) {
+      cardsRef.current.push(el);
     }
   };
 
@@ -110,48 +100,46 @@ const Skills = () => {
     <section
       id="skills"
       ref={sectionRef}
-      className="relative w-full bg-[#070707] text-white py-24 px-6 md:px-12 select-none overflow-hidden"
+      className="relative w-full bg-[#050505] text-white py-28 px-6 md:px-12 select-none overflow-hidden"
     >
-      {/* Watermark Text */}
+      {/* Background Watermark Section Text */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <h1 className="text-[25vw] font-black text-white/[0.025] uppercase tracking-tighter select-none">
           SKILLS
         </h1>
       </div>
 
-      {/* Ambient Radial Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[160px] pointer-events-none"></div>
+      {/* Ambient Red Glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[160px] pointer-events-none"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto w-full space-y-12">
+        
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded bg-black/80 backdrop-blur-xl border border-red-600/40 text-[11px] font-mono uppercase tracking-widest text-white shadow-xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded bg-black/80 backdrop-blur-xl border border-red-600/40 text-[11px] font-mono uppercase tracking-widest text-white shadow-xl">
               <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span>
               <span className="text-red-500 font-bold">03</span>
               <span className="text-white/40">|</span>
-              <span>CIRCULAR SKILL FORMATION</span>
+              <span>TECHNICAL EPISODES & MASTERY</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
-              EXPERTISE & SKILLS <br />
+              TECHNICAL SKILLS <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-700 drop-shadow-[0_0_25px_rgba(229,9,20,0.35)]">
-                CURVED ARC ANIMATION.
+                EPISODE SERIES & INSTRUMENTS.
               </span>
             </h2>
           </div>
 
-          {/* Category Filter Tabs */}
+          {/* Filter Tabs */}
           <div className="flex flex-wrap gap-2 bg-black/60 p-1.5 rounded-xl border border-white/10 backdrop-blur-md">
-            {['ALL', 'LANGUAGES', 'AI & ML', 'VISION', 'WEB TECH'].map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => {
-                  skillNodesRef.current = [];
-                  setActiveFilter(cat);
-                }}
-                className={`px-4 py-2 rounded-lg text-xs font-mono tracking-wider transition-all duration-300 ${
+                onClick={() => setActiveFilter(cat)}
+                className={`px-3.5 py-1.5 text-[11px] font-mono uppercase tracking-wider rounded-lg transition-all duration-300 ${
                   activeFilter === cat
-                    ? 'bg-red-600 text-white font-bold shadow-[0_0_15px_rgba(229,9,20,0.6)] scale-105'
+                    ? 'bg-red-600 text-white font-bold shadow-[0_0_15px_rgba(229,9,20,0.6)]'
                     : 'text-white/60 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -161,115 +149,90 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* --- CIRCULAR / ARC-STYLE FORMATION DISPLAY --- */}
-        <div className="relative min-h-[520px] md:min-h-[580px] w-full flex items-center justify-center pt-8 pb-12 overflow-hidden">
-          
-          {/* Half-Circle / Circular Radial Arc Guides */}
-          <div className="absolute w-[500px] h-[500px] md:w-[680px] md:h-[680px] rounded-full border border-dashed border-red-600/20 pointer-events-none animate-[spin_60s_linear_infinite]"></div>
-          <div className="absolute w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full border border-red-600/10 pointer-events-none"></div>
+        {/* Netflix Episode Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredSkills.map((skill, idx) => (
+            <div
+              key={skill.name}
+              ref={addToRefs}
+              className="relative p-7 bg-[#141414]/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-all duration-300 group hover:border-red-600/60 overflow-hidden flex flex-col justify-between"
+              style={{ transformStyle: 'preserve-3d' }}
+            >
+              {/* Specular Radial Glow on Hover */}
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"
+                style={{
+                  background: 'radial-gradient(350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(229,9,20,0.18), transparent 70%)'
+                }}
+              ></div>
 
-          {/* Center Hub Card */}
-          <div
-            ref={centerHubRef}
-            className="absolute z-20 w-44 h-44 md:w-56 md:h-56 rounded-full bg-[#121212]/95 border-2 border-red-600/60 shadow-[0_0_50px_rgba(229,9,20,0.35)] backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center transition-all duration-500 group hover:scale-105"
-          >
-            <span className="text-3xl md:text-4xl mb-1 group-hover:scale-125 transition-transform duration-300">{activeSkill.icon}</span>
-            <h4 className="text-sm md:text-base font-black text-white leading-tight uppercase tracking-tight">{activeSkill.name}</h4>
-            <div className="mt-2 text-xl md:text-2xl font-mono font-extrabold text-red-500">{activeSkill.level}%</div>
-            <span className="text-[10px] font-mono text-white/50 uppercase tracking-widest mt-1">{activeSkill.category}</span>
-          </div>
+              <div className="relative z-10 space-y-4">
+                {/* Top Badge Bar */}
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-red-500 bg-red-600/10 px-2.5 py-1 rounded border border-red-600/30">
+                    {skill.episode}
+                  </span>
+                  <span className="text-[10px] font-mono text-white/50 tracking-wider uppercase border border-white/10 px-2 py-0.5 rounded bg-black/40">
+                    {skill.tag}
+                  </span>
+                </div>
 
-          {/* Curved Arc Skill Nodes Container */}
-          <div ref={arcContainerRef} className="relative w-full h-full max-w-5xl flex items-center justify-center">
-            {filteredSkills.map((skill, index) => {
-              const total = filteredSkills.length;
-              // Compute angle along semi-circle arc (-80deg to +80deg)
-              const startAngle = -80;
-              const endAngle = 80;
-              const angleStep = total > 1 ? (endAngle - startAngle) / (total - 1) : 0;
-              const currentAngle = startAngle + index * angleStep;
-
-              // Radial position calculations for half-circle arc formation
-              const radius = window.innerWidth < 768 ? 160 : 250;
-              const angleRad = (currentAngle * Math.PI) / 180;
-              const x = radius * Math.sin(angleRad);
-              const y = -radius * Math.cos(angleRad) + (window.innerWidth < 768 ? 20 : 40);
-
-              const isActive = activeSkill.name === skill.name;
-
-              return (
-                <div
-                  key={skill.name}
-                  ref={addToNodes}
-                  onMouseEnter={() => setActiveSkill(skill)}
-                  onClick={() => setActiveSkill(skill)}
-                  style={{
-                    transform: `translate(${x}px, ${y}px)`,
-                    transition: 'transform 0.4s ease-out, box-shadow 0.3s ease, border-color 0.3s ease'
-                  }}
-                  className={`absolute cursor-pointer z-30 p-3.5 md:p-4 rounded-2xl bg-[#161616]/95 backdrop-blur-xl border transition-all duration-300 flex items-center gap-3 w-[160px] md:w-[200px] shadow-xl group hover:z-40 hover:scale-110 ${
-                    isActive
-                      ? 'border-red-600 shadow-[0_0_30px_rgba(229,9,20,0.6)] bg-red-950/30'
-                      : 'border-white/10 hover:border-red-600/70 hover:shadow-[0_0_20px_rgba(229,9,20,0.3)]'
-                  }`}
-                >
-                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-red-600/10 border border-red-600/30 flex items-center justify-center text-lg md:text-xl font-bold group-hover:scale-110 transition-transform">
-                    {skill.icon}
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs md:text-sm font-bold text-white truncate group-hover:text-red-500 transition-colors">
+                {/* Title & Icon Header */}
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl filter drop-shadow">{skill.icon}</span>
+                  <div>
+                    <h3 className="text-xl font-black text-white tracking-tight group-hover:text-red-500 transition-colors duration-300">
                       {skill.name}
-                    </span>
-                    <div className="flex items-center justify-between gap-2 mt-1">
-                      <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-red-600 to-rose-500 rounded-full"
-                          style={{ width: `${skill.level}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-[10px] font-mono font-bold text-red-500">{skill.level}%</span>
-                    </div>
+                    </h3>
+                    <p className="text-[11px] font-mono text-white/40 uppercase tracking-wider">
+                      {skill.category}
+                    </p>
                   </div>
                 </div>
-              );
-            })}
+
+                {/* Skill Description */}
+                <p className="text-xs text-white/70 font-light leading-relaxed">
+                  {skill.desc}
+                </p>
+              </div>
+
+              {/* Progress Bar & Level Indicator */}
+              <div className="relative z-10 pt-5 mt-4 border-t border-white/10 space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-white/50 uppercase tracking-widest text-[10px]">PROFICIENCY</span>
+                  <span className="text-red-500 font-bold">{skill.level}%</span>
+                </div>
+                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden p-0.5">
+                  <div 
+                    className="h-full bg-gradient-to-r from-red-600 via-rose-500 to-red-400 rounded-full transition-all duration-1000 group-hover:shadow-[0_0_12px_rgba(229,9,20,0.8)]"
+                    style={{ width: `${skill.level}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Bottom Red Corner Indicator Dot */}
+              <div className="absolute bottom-3 right-3 w-1.5 h-1.5 rounded-full bg-red-600/40 group-hover:bg-red-600 group-hover:shadow-[0_0_10px_#E50914] transition-all" />
+            </div>
+          ))}
+        </div>
+
+        {/* Tools & Ecosystem Pills */}
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-xs font-mono uppercase tracking-widest text-white/50">
+            // DEVELOPER TOOLBOX & ECOSYSTEM
+          </div>
+          <div className="flex flex-wrap gap-2.5 justify-center">
+            {toolTags.map((tool, tIdx) => (
+              <span
+                key={tIdx}
+                className="px-3 py-1 rounded bg-white/[0.03] border border-white/10 text-xs font-mono text-white/80 hover:border-red-600/50 hover:bg-red-600/10 hover:text-white transition-all duration-300"
+              >
+                {tool}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* Bottom Tools & Soft Skills Bento Card */}
-        <div className="p-8 md:p-10 bg-[#121212]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-8 hover:border-red-600/50 transition-all duration-300">
-          <div className="space-y-4">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold flex items-center gap-2">
-              <span>🛠</span> Frameworks, Libraries & Platforms
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {toolTags.map((tool, tIdx) => (
-                <span
-                  key={tIdx}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white/80 hover:border-red-600/60 hover:bg-red-600/20 hover:scale-105 transition-all cursor-default"
-                >
-                  {tool}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold flex items-center gap-2">
-              <span>🌟</span> Soft Skills & Professional Strengths
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {softSkills.map((soft, sIdx) => (
-                <span
-                  key={sIdx}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white/80 hover:border-red-600/60 hover:bg-red-600/20 hover:scale-105 transition-all cursor-default"
-                >
-                  {soft}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
