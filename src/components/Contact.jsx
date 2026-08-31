@@ -58,13 +58,13 @@ const Contact = () => {
       </motion.div>
 
       {/* Centered Form Card Container */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto flex items-center justify-center">
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 flex items-center justify-center my-auto">
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="bg-[#141414]/95 backdrop-blur-2xl border border-white/15 w-full p-8 md:p-14 text-white flex flex-col justify-between rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] relative overflow-hidden"
+          className="bg-[#141414]/95 backdrop-blur-2xl border border-white/15 w-full p-8 md:p-12 text-white flex flex-col justify-between rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] relative overflow-hidden"
         >
           {/* Subtle top crimson accent stripe */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-90"></div>
