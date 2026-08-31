@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import pictureImg from '../../profile-photo.jpeg';
+
+const pictureImg = '/profile-photo.jpeg';
 
 const Hero = () => {
   const sectionRef = useRef(null);
@@ -175,7 +176,7 @@ const Hero = () => {
                 View Projects
               </a>
               <a
-                href="Vinuthna-Resume.pdf"
+                href="/Vinuthna-Resume.pdf"
                 download="Vinuthna-Resume.pdf"
                 className="px-8 py-3.5 bg-neutral-900/80 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded hover:bg-neutral-800 transition-all duration-300 shadow-xl backdrop-blur-md flex items-center gap-2 hover:scale-105 active:scale-95"
               >
