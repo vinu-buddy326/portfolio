@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import NetflixPreloader from './components/NetflixPreloader';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -12,6 +12,10 @@ import Footer from './components/Footer';
 function App() {
   const [loading, setLoading] = useState(true);
 
+  const handlePreloaderComplete = useCallback(() => {
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
     document.title = "Vinuthna Vasanthi";
   }, []);
@@ -19,7 +23,7 @@ function App() {
   return (
     <main className="bg-[#050505] min-h-screen text-white relative selection:bg-red-600 selection:text-white overflow-x-hidden">
       {/* Cinematic Preloader */}
-      {loading && <NetflixPreloader onComplete={() => setLoading(false)} />}
+      {loading && <NetflixPreloader onComplete={handlePreloaderComplete} />}
 
       {/* Portfolio Sections */}
       <Hero />
