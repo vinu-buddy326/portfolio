@@ -6,9 +6,6 @@ const Hero = () => {
   const sectionRef = useRef(null);
   const cardRef = useRef(null);
   const glareRef = useRef(null);
-  const spotlightRef = useRef(null);
-  const cursorDotRef = useRef(null);
-  const cursorRingRef = useRef(null);
   const contentRef = useRef(null);
 
   const developerRoles = [
@@ -45,19 +42,7 @@ const Hero = () => {
       "-=0.9"
     );
 
-    // --- MOUSE PHYSICS & SPOTLIGHT TRACKING ---
-    gsap.set([cursorDotRef.current, cursorRingRef.current], {
-      scale: 0.5,
-      opacity: 0,
-      transformOrigin: "50% 50%"
-    });
-
-    const xToDot = gsap.quickTo(cursorDotRef.current, "x", { duration: 0.05, ease: "power2.out" });
-    const yToDot = gsap.quickTo(cursorDotRef.current, "y", { duration: 0.05, ease: "power2.out" });
-    
-    const xToRing = gsap.quickTo(cursorRingRef.current, "x", { duration: 0.15, ease: "power3.out" });
-    const yToRing = gsap.quickTo(cursorRingRef.current, "y", { duration: 0.15, ease: "power3.out" });
-
+    // --- MOUSE PHYSICS FOR CARD 3D TILT ---
     const xTilt = gsap.quickTo(card, "rotationY", { duration: 0.4, ease: "power3.out" });
     const yTilt = gsap.quickTo(card, "rotationX", { duration: 0.4, ease: "power3.out" });
     const glareX = gsap.quickTo(glareRef.current, "x", { duration: 0.3, ease: "power2.out" });
@@ -67,18 +52,6 @@ const Hero = () => {
       const rect = section.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-
-      const dotSize = 12;
-      const ringSize = 48;
-
-      if (spotlightRef.current) {
-        spotlightRef.current.style.transform = `translate3d(${x - 300}px, ${y - 300}px, 0)`;
-      }
-
-      xToDot(x - dotSize / 2);
-      yToDot(y - dotSize / 2);
-      xToRing(x - ringSize / 2);
-      yToRing(y - ringSize / 2);
 
       const cardRect = card.getBoundingClientRect();
       const cardCenterX = cardRect.left + cardRect.width / 2 - rect.left;
@@ -94,35 +67,16 @@ const Hero = () => {
       glareY((y - cardRect.top) - cardRect.height / 2);
     };
 
-    const handleMouseEnter = () => {
-      gsap.to([cursorDotRef.current, cursorRingRef.current], {
-        opacity: 1,
-        scale: 1,
-        duration: 0.3,
-        ease: "power2.out"
-      });
-      if (spotlightRef.current) gsap.to(spotlightRef.current, { opacity: 1, duration: 0.3 });
-    };
-
     const handleMouseLeave = () => {
-      gsap.to([cursorDotRef.current, cursorRingRef.current], {
-        opacity: 0,
-        scale: 0.5,
-        duration: 0.3,
-        ease: "power2.inOut"
-      });
-      if (spotlightRef.current) gsap.to(spotlightRef.current, { opacity: 0, duration: 0.3 });
       xTilt(0);
       yTilt(0);
     };
 
     section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseenter", handleMouseEnter);
     section.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseenter", handleMouseEnter);
       section.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
@@ -131,7 +85,7 @@ const Hero = () => {
     <section
       id="home"
       ref={sectionRef}
-      className="relative w-full h-screen bg-[#050505] overflow-hidden flex flex-col justify-between select-none cursor-none"
+      className="relative w-full h-screen bg-[#050505] overflow-hidden flex flex-col justify-between select-none"
     >
       {/* 1. Section Watermark Background */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
@@ -283,17 +237,6 @@ const Hero = () => {
           <span>[ PORTFOLIO RELEASE v2.6 ]</span>
         </div>
       </div>
-
-      {/* Custom Precision Cursor */}
-      <div
-        ref={cursorDotRef}
-        className="absolute top-0 left-0 z-50 pointer-events-none w-3 h-3 bg-red-600 rounded-full shadow-[0_0_15px_#E50914]"
-      ></div>
-
-      <div
-        ref={cursorRingRef}
-        className="absolute top-0 left-0 z-50 pointer-events-none w-12 h-12 border border-red-600/60 rounded-full flex items-center justify-center backdrop-blur-[1px]"
-      ></div>
 
       {/* --- NAVBAR --- */}
       <header className="absolute top-0 left-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-12 py-6 flex items-center justify-between pointer-events-auto">
