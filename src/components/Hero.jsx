@@ -8,6 +8,7 @@ const Hero = () => {
   const cardRef = useRef(null);
   const glareRef = useRef(null);
   const contentRef = useRef(null);
+  const spotlightRef = useRef(null);
 
   const developerRoles = [
     'AI & DATA SCIENCE SPECIALIST',
@@ -22,71 +23,80 @@ const Hero = () => {
     const content = contentRef.current;
     if (!section || !card || !content) return;
 
-    // --- GSAP CINEMATIC ENTRANCE ANIMATION ---
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+    const ctx = gsap.context(() => {
+      const headerEl = section.querySelector('header');
+      const animItems = content.querySelectorAll('.hero-anim-item');
 
-    tl.fromTo(
-      section.querySelector('header'),
-      { y: -60, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }
-    )
-    .fromTo(
-      content.querySelectorAll('.hero-anim-item'),
-      { y: 50, opacity: 0, filter: "blur(10px)" },
-      { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.1, stagger: 0.12 },
-      "-=0.7"
-    )
-    .fromTo(
-      card,
-      { scale: 0.75, opacity: 0, rotationY: 35, rotationX: -15 },
-      { scale: 1, opacity: 1, rotationY: 0, rotationX: 0, duration: 1.4, ease: "back.out(1.2)" },
-      "-=0.9"
-    );
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    // --- MOUSE PHYSICS FOR CARD 3D TILT ---
-    const xTilt = gsap.quickTo(card, "rotationY", { duration: 0.4, ease: "power3.out" });
-    const yTilt = gsap.quickTo(card, "rotationX", { duration: 0.4, ease: "power3.out" });
-    const glareX = gsap.quickTo(glareRef.current, "x", { duration: 0.3, ease: "power2.out" });
-    const glareY = gsap.quickTo(glareRef.current, "y", { duration: 0.3, ease: "power2.out" });
+      if (headerEl) {
+        tl.fromTo(
+          headerEl,
+          { y: -60, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1 }
+        );
+      }
 
-    const handleMouseMove = (e) => {
-      const rect = section.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      if (animItems.length > 0) {
+        tl.fromTo(
+          animItems,
+          { y: 50, opacity: 0, filter: "blur(10px)" },
+          { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.1, stagger: 0.12 },
+          "-=0.7"
+        );
+      }
 
-      const cardRect = card.getBoundingClientRect();
-      const cardCenterX = cardRect.left + cardRect.width / 2 - rect.left;
-      const cardCenterY = cardRect.top + cardRect.height / 2 - rect.top;
+      tl.fromTo(
+        card,
+        { scale: 0.75, opacity: 0, rotationY: 35, rotationX: -15 },
+        { scale: 1, opacity: 1, rotationY: 0, rotationX: 0, duration: 1.4, ease: "back.out(1.2)" },
+        "-=0.9"
+      );
 
-      const rotateX = -((y - cardCenterY) / (cardRect.height / 2)) * 16;
-      const rotateY = ((x - cardCenterX) / (cardRect.width / 2)) * 16;
+      // Mouse Physics for 3D Tilt Card
+      const xTilt = gsap.quickTo(card, "rotationY", { duration: 0.4, ease: "power3.out" });
+      const yTilt = gsap.quickTo(card, "rotationX", { duration: 0.4, ease: "power3.out" });
+      const glareX = glareRef.current ? gsap.quickTo(glareRef.current, "x", { duration: 0.3, ease: "power2.out" }) : null;
+      const glareY = glareRef.current ? gsap.quickTo(glareRef.current, "y", { duration: 0.3, ease: "power2.out" }) : null;
 
-      xTilt(rotateY);
-      yTilt(rotateX);
+      const handleMouseMove = (e) => {
+        const rect = section.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-      glareX((x - cardRect.left) - cardRect.width / 2);
-      glareY((y - cardRect.top) - cardRect.height / 2);
-    };
+        const cardRect = card.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2 - rect.left;
+        const cardCenterY = cardRect.top + cardRect.height / 2 - rect.top;
 
-    const handleMouseLeave = () => {
-      xTilt(0);
-      yTilt(0);
-    };
+        const rotateX = -((y - cardCenterY) / (cardRect.height / 2)) * 16;
+        const rotateY = ((x - cardCenterX) / (cardRect.width / 2)) * 16;
 
-    section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseleave", handleMouseLeave);
+        xTilt(rotateY);
+        yTilt(rotateX);
 
-    return () => {
-      section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseleave", handleMouseLeave);
-    };
+        if (glareX && glareY) {
+          glareX((x - cardRect.left) - cardRect.width / 2);
+          glareY((y - cardRect.top) - cardRect.height / 2);
+        }
+      };
+
+      const handleMouseLeave = () => {
+        xTilt(0);
+        yTilt(0);
+      };
+
+      section.addEventListener("mousemove", handleMouseMove);
+      section.addEventListener("mouseleave", handleMouseLeave);
+    }, section);
+
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       id="home"
       ref={sectionRef}
-      className="relative w-full h-screen bg-[#050505] overflow-hidden flex flex-col justify-between select-none"
+      className="relative w-full min-h-screen bg-[#050505] overflow-hidden flex flex-col justify-between select-none"
     >
       {/* 1. Section Watermark Background */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
@@ -135,7 +145,7 @@ const Hero = () => {
         </div>
 
         {/* Main Center Stage Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 my-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 my-auto py-8">
           
           {/* Left Side: Developer Bio */}
           <div className="lg:col-span-5 flex flex-col items-start space-y-5 text-left">

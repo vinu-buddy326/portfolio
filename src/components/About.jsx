@@ -12,42 +12,48 @@ const About = () => {
     const section = sectionRef.current;
     if (!section) return;
 
-    // --- Entrance Animation on Scroll ---
-    gsap.fromTo(
-      cardRefs.current,
-      { y: 80, opacity: 0, scale: 0.95 },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 70%",
-          toggleActions: "play none none reverse"
-        }
+    const cards = cardRefs.current.filter(Boolean);
+
+    const ctx = gsap.context(() => {
+      if (cards.length > 0) {
+        gsap.fromTo(
+          cards,
+          { y: 80, opacity: 0, scale: 0.95 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 75%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
       }
-    );
 
-    // --- Interactive Mouse Spotlight per Bento Card ---
-    const cards = cardRefs.current;
-    const handleMouseMove = (e, card) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    };
+      // Mouse spotlight per card
+      const cleanups = cards.map((card) => {
+        const handleMouseMove = (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        };
+        card.addEventListener('mousemove', handleMouseMove);
+        return () => card.removeEventListener('mousemove', handleMouseMove);
+      });
 
-    cards.forEach((card) => {
-      if (!card) return;
-      const listener = (e) => handleMouseMove(e, card);
-      card.addEventListener('mousemove', listener);
-      return () => card.removeEventListener('mousemove', listener);
-    });
+      return () => {
+        cleanups.forEach(fn => fn());
+      };
+    }, section);
 
+    return () => ctx.revert();
   }, []);
 
   const addToRefs = (el) => {
